@@ -8,14 +8,14 @@ with open("recipient.txt", "r") as recipient_file:
     RECIPIENT = recipient_file.read().strip()
 
 
-def send_notification(message):
+def send_notification(message, CDT_TIMESTAMP):
     recipient = RECIPIENT
     subject = "Cubs Win Notifier"
     body = message
-    send_email_notification(recipient, subject, body)
+    send_email_notification(recipient, subject, body, CDT_TIMESTAMP)
 
 
-def check_cubs_game():
+def check_cubs_game(CDT_TIMESTAMP):
     today = datetime.now().strftime("%Y-%m-%d")
     games = statsapi.schedule(start_date=today, end_date=today, team=112)
 
@@ -28,12 +28,12 @@ def check_cubs_game():
                 away_score = game["away_score"]
                 if home_score > away_score:
                     message = f"The Cubs won their home game against the {opponent}. Open the CFA app for free food!"
-                    send_notification(message)
+                    send_notification(message, CDT_TIMESTAMP)
                 else:
                     print("The Cubs lost at home. No notification sent.")
             elif game["status"] == "In Progress":
                 message = f"The Cubs are currently playing the {opponent}."
-                send_notification(message)
+                send_notification(message, CDT_TIMESTAMP)
             elif game["status"] == "Scheduled" or game["status"] == "Pre-Game":
                 game_time = game["game_datetime"]
 
@@ -52,10 +52,10 @@ def check_cubs_game():
                 message = (
                     f"The Cubs will be playing the {opponent} at home at {game_time}."
                 )
-                send_notification(message)
+                send_notification(message, CDT_TIMESTAMP)
             else:
                 message = f"The Cubs will be playing the {opponent} at home today, but the game status is unknown. Debug info: {game['status']}"
-                send_notification(message)
+                send_notification(message, CDT_TIMESTAMP)
 
             print(message)
             break
@@ -77,8 +77,11 @@ if __name__ == "__main__":
             timezone(timedelta(hours=-5))
         )
 
-    print(
-        f"Today is {current_time.strftime('%A, %B %d, %Y')}. The time is {current_time.strftime('%I:%M%p')}."
-    )
-    check_cubs_game()
+    CDT_TIMESTAMP = {
+        "today": current_time.strftime("%A, %B %d, %Y"),
+        "time": current_time.strftime("%I:%M%p"),
+    }
+
+    print(f"Today is {CDT_TIMESTAMP['today']}. The time is {CDT_TIMESTAMP['time']}.")
+    check_cubs_game(CDT_TIMESTAMP)
     print()

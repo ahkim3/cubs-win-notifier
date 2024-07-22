@@ -37,7 +37,7 @@ def build_service():
     return build("gmail", "v1", credentials=credentials)
 
 
-def send_email(recipient, subject, body):
+def send_email(recipient, subject, body, CDT_TIMESTAMP):
     service = build_service()
     message_prepared = create_message(SENDER_EMAIL, recipient, subject, body)
     try:
@@ -47,10 +47,21 @@ def send_email(recipient, subject, body):
             .send(userId="me", body=message_prepared)
             .execute()
         )
+
+        # Export message and timestamp for README
+        saved_message = f"```\n{body}\n```"
+        saved_timestamp = (
+            f"`Last updated on {CDT_TIMESTAMP['today']} at {CDT_TIMESTAMP['time']} CDT`"
+        )
+        with open("message.txt", "w") as message_file:
+            message_file.write(str(saved_message))
+        with open("timestamp.txt", "w") as timestamp_file:
+            timestamp_file.write(str(saved_timestamp))
+
         print("Message sent successfully!")
     except Exception as e:
         print("Error sending message:", e)
 
 
-def send_email_notification(recipient, subject, body):
-    send_email(recipient, subject, body)
+def send_email_notification(recipient, subject, body, CDT_TIMESTAMP):
+    send_email(recipient, subject, body, CDT_TIMESTAMP)
