@@ -36,14 +36,11 @@ def check_cubs_game():
             elif game["status"] == "Scheduled" or game["status"] == "Pre-Game":
                 game_time = game["game_datetime"]
 
-                # Get rid of date if date is today
-                if game_time[:10] == today:
-                    game_time = game_time[11:16]
-                else:
-                    game_time = game_time
+                # Extract the time part from the game_time string
+                game_time_extracted = game_time[11:16]
 
                 # Convert from UTC to CDT
-                game_time = datetime.datetime.strptime(game_time, "%H:%M")
+                game_time = datetime.datetime.strptime(game_time_extracted, "%H:%M")
                 cdt_timezone = datetime.timezone(datetime.timedelta(hours=-5))
                 game_time = (
                     game_time.replace(tzinfo=datetime.timezone.utc)
