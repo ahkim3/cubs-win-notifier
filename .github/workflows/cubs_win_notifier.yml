@@ -50,8 +50,10 @@ jobs:
       - name: Read timestamp and message
         id: read-files
         run: |
-          echo "TIMESTAMP=$(cat timestamp.txt)" >> $GITHUB_ENV
-          echo "MESSAGE=$(cat message.txt)" >> $GITHUB_ENV
+          TIMESTAMP=$(cat timestamp.txt | sed 's/%/%25/g' | sed 's/\n/%0A/g' | sed 's/\r/%0D/g' | sed 's/`/%60/g')
+          MESSAGE=$(cat message.txt | sed 's/%/%25/g' | sed 's/\n/%0A/g' | sed 's/\r/%0D/g' | sed 's/`/%60/g')
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
 
       - name: Update README
         run: |
