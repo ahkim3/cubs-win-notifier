@@ -1,5 +1,6 @@
 import statsapi
-import datetime
+import tzlocal
+from datetime import datetime, timezone, timedelta
 from email_handler import send_email_notification
 
 # Grab recipient from recipient.txt
@@ -15,7 +16,7 @@ def send_notification(message):
 
 
 def check_cubs_game():
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now().strftime("%Y-%m-%d")
     games = statsapi.schedule(start_date=today, end_date=today, team=112)
 
     for game in games:
@@ -40,10 +41,10 @@ def check_cubs_game():
                 game_time_extracted = game_time[11:16]
 
                 # Convert from UTC to CDT
-                game_time = datetime.datetime.strptime(game_time_extracted, "%H:%M")
-                cdt_timezone = datetime.timezone(datetime.timedelta(hours=-5))
+                game_time = datetime.strptime(game_time_extracted, "%H:%M")
+                cdt_timezone = timezone(timedelta(hours=-5))
                 game_time = (
-                    game_time.replace(tzinfo=datetime.timezone.utc)
+                    game_time.replace(tzinfo=timezone.utc)
                     .astimezone(cdt_timezone)
                     .strftime("%I:%M%p")
                 )
@@ -65,12 +66,19 @@ def check_cubs_game():
 
 
 if __name__ == "__main__":
+    current_time = datetime.now()
+
+    # Get the local timezone
+    local_timezone = tzlocal.get_localzone()
+
+    # Convert datetime to CDT if not already
+    if local_timezone != "America/Chicago":
+        current_time = current_time.astimezone(timezone.utc).astimezone(
+            timezone(timedelta(hours=-5))
+        )
+
     print(
-        "Today is "
-        + datetime.datetime.now().strftime("%A, %B %d, %Y")
-        + ". The time is "
-        + datetime.datetime.now().strftime("%I:%M%p")
-        + "."
+        f"Today is {current_time.strftime('%A, %B %d, %Y')}. The time is {current_time.strftime('%I:%M%p')}."
     )
     check_cubs_game()
     print()
