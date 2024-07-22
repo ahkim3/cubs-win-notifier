@@ -49,9 +49,9 @@ def send_email(recipient, subject, body, CDT_TIMESTAMP):
         )
 
         # Export message and timestamp for README
-        saved_message = f"```\n{body}\n```"
+        saved_message = f"{body}"
         saved_timestamp = (
-            f"`Last updated on {CDT_TIMESTAMP['today']} at {CDT_TIMESTAMP['time']} CDT`"
+            f"Last updated on {CDT_TIMESTAMP['today']} at {CDT_TIMESTAMP['time']} CDT"
         )
         with open("message.txt", "w") as message_file:
             message_file.write(str(saved_message))

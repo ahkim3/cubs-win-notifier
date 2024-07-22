@@ -47,13 +47,18 @@ jobs:
         run: |
           python run.py
 
-      - name: Grab output to update README
-        run: python3 process_files.py
+      - name: Grab output to update README from file
+        id: read-files
+        run: |
+          TIMESTAMP=$(cat timestamp.txt)
+          MESSAGE=$(cat message.txt)
+          echo "::set-output name=timestamp::$TIMESTAMP"
+          echo "::set-output name=message::$MESSAGE"
 
       - name: Update README
         run: |
-          sed -i '/<!-- start-timestamp -->/,/<!-- end-timestamp -->/c\<!-- start-timestamp -->\n'"$TIMESTAMP"'\n<!-- end-timestamp -->' README.md
-          sed -i '/<!-- start-message -->/,/<!-- end-message -->/c\<!-- start-message -->\n'"$MESSAGE"'\n<!-- end-message -->' README.md
+          sed -i '/<!-- start-timestamp -->/,/<!-- end-timestamp -->/c\<!-- start-timestamp -->\n`'"$TIMESTAMP"'`\n<!-- end-timestamp -->' README.md
+          sed -i '/<!-- start-message -->/,/<!-- end-message -->/c\<!-- start-message -->\n```\n'"$MESSAGE"'\n```\n<!-- end-message -->' README.md
 
       - name: Commit changes
         run: |
