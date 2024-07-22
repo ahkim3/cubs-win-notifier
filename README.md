@@ -9,7 +9,7 @@ This project is completely automated with GitHub Actions, and can be manually tr
 # Latest Game Status
 
 <!-- start-timestamp -->
-``
+
 <!-- end-timestamp -->
 
 <!-- start-message -->
