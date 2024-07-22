@@ -1,34 +1,49 @@
 import os
+import re
 
-# Read and escape the content of the files
-timestamp = open("timestamp.txt", "r").read()
-message = open("message.txt", "r").read()
 
-# Print the content of the files
-print(f"Timestamp: {timestamp}")
-print(f"Message: {message}")
+def read_and_escape(file_path):
+    # Read the content of the file and escape special characters
+    with open(file_path, "r") as file:
+        content = file.read().strip()
+    return content
 
-# Read the README file
-with open("README.md", "r") as file:
-    content = file.read()
 
-# Print the content of the README file
-print(f"README.md content: {content}")
+def update_readme(readme_path, timestamp, message):
+    # Read the README file content
+    with open(readme_path, "r") as file:
+        content = file.read()
 
-# Replace the placeholders with the actual content, including backticks
-content = content.replace(
-    "<!-- start-timestamp -->\n<!-- end-timestamp -->",
-    f"<!-- start-timestamp -->\n`{timestamp}`\n<!-- end-timestamp -->",
-)
-content = content.replace(
-    "<!-- start-message -->\n<!-- end-message -->",
-    f"<!-- start-message -->\n```\n{message}\n```\n<!-- end-message -->",
-)
+    # Replace the timestamp section with the new content including backticks
+    content = re.sub(
+        r"<!-- start-timestamp -->.*?<!-- end-timestamp -->",
+        f"<!-- start-timestamp -->\n`{timestamp}`\n<!-- end-timestamp -->",
+        content,
+        flags=re.DOTALL,
+    )
 
-# Print the updated content of the README file
-print(f"Updated README.md content: {content}")
+    # Replace the message section with the new content including backticks
+    content = re.sub(
+        r"<!-- start-message -->.*?<!-- end-message -->",
+        f"<!-- start-message -->\n```\n{message}\n```\n<!-- end-message -->",
+        content,
+        flags=re.DOTALL,
+    )
 
-# Write the updated content back to the README file
-with open("README.md", "w") as file:
-    file.write(content)
-    print("README.md updated successfully!")
+    # Write the updated content back to the README file
+    with open(readme_path, "w") as file:
+        file.write(content)
+        print("README.md updated successfully!")
+
+
+def main():
+    # Read and escape the content of timestamp.txt and message.txt
+    timestamp = read_and_escape("timestamp.txt")
+    message = read_and_escape("message.txt")
+
+    # Update the README file
+    update_readme("README.md", timestamp, message)
+
+
+if __name__ == "__main__":
+    main()
