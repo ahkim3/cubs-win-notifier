@@ -55,8 +55,8 @@ jobs:
 
       - name: Update README
         run: |
-          TIMESTAMP=${{ steps.read-files.outputs.timestamp }}
-          MESSAGE=${{ steps.read-files.outputs.message }}
+          TIMESTAMP="${{ steps.read-files.outputs.timestamp }}"
+          MESSAGE="${{ steps.read-files.outputs.message }}"
           sed -i '/<!-- start-timestamp -->/,/<!-- end-timestamp -->/c\<!-- start-timestamp -->\n'"$TIMESTAMP"'\n<!-- end-timestamp -->' README.md
           sed -i '/<!-- start-message -->/,/<!-- end-message -->/c\<!-- start-message -->\n'"$MESSAGE"'\n<!-- end-message -->' README.md
 
