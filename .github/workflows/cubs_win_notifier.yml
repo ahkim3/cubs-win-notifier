@@ -46,19 +46,7 @@ jobs:
       - name: Run Cubs Win Notifier
         run: |
           python run.py
-
-      - name: Grab output to update README from file
-        id: read-files
-        run: |
-          TIMESTAMP=$(cat timestamp.txt)
-          MESSAGE=$(cat message.txt)
-          echo "::set-output name=timestamp::$TIMESTAMP"
-          echo "::set-output name=message::$MESSAGE"
-
-      - name: Update README
-        run: |
-          sed -i '/<!-- start-timestamp -->/,/<!-- end-timestamp -->/c\<!-- start-timestamp -->\n'`echo $TIMESTAMP`'\n<!-- end-timestamp -->' README.md
-          sed -i '/<!-- start-message -->/,/<!-- end-message -->/c\<!-- start-message -->\n```\n'`echo $MESSAGE`'\n```\n<!-- end-message -->' README.md
+          python update_readme.py
 
       - name: Commit changes
         run: |
