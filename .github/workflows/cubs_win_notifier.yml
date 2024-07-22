@@ -3,10 +3,11 @@ name: Cubs Win Notifier
 on:
   schedule:
     # Runs every day at specified intervals
-    - cron: '0 16 * * *'   # 11am CDT
-    - cron: '0 21 * * *'   # 4pm CDT
-    - cron: '0 0 * * *'    # 7pm CDT (next day in UTC)
-    - cron: '0 4 * * *'    # 11pm CDT (next day in UTC)
+    - cron: "0 16 * * *" # 11am CDT
+    - cron: "0 21 * * *" # 4pm CDT
+    - cron: "0 0 * * *" # 7pm CDT (next day in UTC)
+    - cron: "0 4 * * *" # 11pm CDT (next day in UTC)
+  workflow_dispatch:
 
 jobs:
   notify:
@@ -17,28 +18,28 @@ jobs:
       id-token: write
 
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run Cubs Win Notifier
-      env:
-        GMAIL_CREDENTIALS: ${{ secrets.GMAIL_CREDENTIALS }}
-        GMAIL_TOKEN: ${{ secrets.GMAIL_TOKEN }}
-        SENDER: ${{ secrets.SENDER }}
-        RECIPIENT: ${{ secrets.RECIPIENT }}
-      run: |
-        echo "$GMAIL_CREDENTIALS" > client_secret.json
-        echo "$GMAIL_TOKEN" > token.json
-        echo "$SENDER" > sender.txt
-        echo "$RECIPIENT" > recipient.txt
-        python run.py
+      - name: Run Cubs Win Notifier
+        env:
+          GMAIL_CREDENTIALS: ${{ secrets.GMAIL_CREDENTIALS }}
+          GMAIL_TOKEN: ${{ secrets.GMAIL_TOKEN }}
+          SENDER: ${{ secrets.SENDER }}
+          RECIPIENT: ${{ secrets.RECIPIENT }}
+        run: |
+          echo "$GMAIL_CREDENTIALS" > client_secret.json
+          echo "$GMAIL_TOKEN" > token.json
+          echo "$SENDER" > sender.txt
+          echo "$RECIPIENT" > recipient.txt
+          python run.py
