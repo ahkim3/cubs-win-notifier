@@ -9,12 +9,12 @@ This project is completely automated with GitHub Actions, and can be manually tr
 # Latest Game Status
 
 <!-- start-timestamp -->
-`Last updated on Tuesday, July 23, 2024 at 04:21PM CDT`
+`Last updated on Tuesday, July 23, 2024 at 08:05PM CDT`
 <!-- end-timestamp -->
 
 <!-- start-message -->
 ```
-The Cubs will be playing the Milwaukee Brewers at home at 07:05PM.
+The Cubs will be playing the Milwaukee Brewers at home at 01:20PM.
 ```
 <!-- end-message -->
 
