@@ -166,7 +166,6 @@ cython_debug/
 cron.log
 sender.txt
 recipient.txt
-message.txt
 
 # Ignore generated credentials from google-github-actions/auth
 gha-creds-*.json
